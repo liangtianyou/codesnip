@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>jQuery Validate动态添加和删除rules</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link rel="stylesheet" type="text/css" href="assets/res/jquery-ui/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+    <script type="text/javascript" src="assets/res/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/res/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="assets/res/jquery-validate/jquery.validate.min.js"></script>
+    
+    <script type="text/javascript">
+        var validoptions = {
+            rules:{
+                name:{
+                    required: true,
+                },
+                age:{
+                    required: true
+                }
+            },
+            messages:{
+                name:{
+                    required: "姓名不能为空"
+                },
+                age:{
+                    required: "年龄不能为空"
+                }
+            }
+        };
+        function validForm(){
+            if($.data($("#age")[0].form,"validator")) {
+                $("#age").rules("add", {
+                    digits: true,
+                    messages: {digits: "年龄必须为数字"}
+                });
+            }else {
+                validoptions.rules.age = {
+                    required: true,
+                    digits: true
+                };
+                validoptions.messages.age = {
+                    required: "年龄不能为空",
+                    digits: "年龄必须为数字"
+                };
+            }
+            $("#fmcreateuser").validate(validoptions);
+            if(!$("#fmcreateuser").valid()){
+                return false;
+            }else{
+                $( "#dialog-message" ).dialog({
+                    modal: true,
+                    buttons: {
+                        Ok: function() {
+                            $( this ).dialog( "close" );
+                        }
+                    }
+                });
+            }
+        }
+        $(function(){
+            $("button").button();
+        })
+    </script>
+</head>
+<body>
+    <form id="fmcreateuser">
+        <fieldset>
+            <label for="name">姓名</label>
+            <input type="text" id="name" name="name" class="ui-widget-content ui-corner-all" /><br /><br />
+            <label for="age">年龄</label>
+            <input type="text" id="age" name="age" class="ui-widget-content ui-corner-all" /><br /><br />
+            <label for="birth">生日</label>
+            <input type="text" id="birth" name="birth" class="ui-widget-content ui-corner-all" /><br /><br />
+            <div class="form-bottom">
+                <button type="button" onclick="javascript:validForm();">提交</button>
+            </div>
+        </fieldset>
+    </form>
+    <div id="dialog-message" style="display:none;" title="提示信息">
+        <p>
+            表单已提交
+        </p>
+    </div>
+</body>
+</html>
